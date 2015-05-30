@@ -1,0 +1,33 @@
+{
+  "name": "unexpected-fs",
+  "version": "0.0.0",
+  "description": "mock-fs assertion for unexpected",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unexpectedjs/unexpected-fs.git"
+  },
+  "keywords": [
+    "mock",
+    "fs",
+    "mockfs",
+    "mock-fs",
+    "unexpected"
+  ],
+  "author": "Gustav Nikolaj Olsen <gustavnikolaj@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unexpectedjs/unexpected-fs/issues"
+  },
+  "homepage": "https://github.com/unexpectedjs/unexpected-fs",
+  "devDependencies": {
+    "mocha": "2.2.5",
+    "unexpected": "7.5.0"
+  },
+  "dependencies": {
+    "mock-fs": "2.7.0"
+  }
+}
