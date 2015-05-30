@@ -19,4 +19,18 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar');
         });
     });
+    describe('does it update already exisitng fs modules?', function () {
+        it('huh?', function () {
+            var fs = require('fs');
+            var someMethod = function (fileName) {
+                return fs.readFileSync('/' + fileName, 'utf-8');
+            }
+            var expect = unexpected
+                .clone()
+                .installPlugin(unexpectedFs);
+            return expect('doesIt.txt', 'with a filesystem like', {
+                '/doesIt.txt': 'Yes it does!'
+            }, 'when passed as parameter to', someMethod, 'to equal', 'Yes it does!');
+        });
+    });
 });
