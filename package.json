@@ -28,6 +28,7 @@
     "unexpected": "7.5.0"
   },
   "dependencies": {
+    "lodash": "3.9.3",
     "mock-fs": "2.7.0"
   }
 }

@@ -16,7 +16,25 @@ describe('unexpected-fs', function () {
         it('should not throw', function () {
             return expect('foobar.txt', 'with fs mocked out', {
                 '/foobar.txt': 'Foobar!'
-            }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar');
+            }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
+        });
+
+        describe('mock.file proxy', function () {
+            it('should realise that an object is a file', function () {
+                return expect(function () {
+                    var fs = require('fs');
+                    expect(fs.readFileSync('/foo.txt', 'utf-8'), 'to satisfy', 'foobar!');
+                    expect(fs.statSync('/foo.txt'), 'to satisfy', {
+                        ctime: new Date(1)
+                    });
+                }, 'with fs mocked out', {
+                    '/foo.txt': {
+                        _isFile: true,
+                        ctime: new Date(1),
+                        content: 'foobar!'
+                    }
+                }, 'not to throw');
+            });
         });
     });
     describe('does it update already exisitng fs modules?', function () {
