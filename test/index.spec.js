@@ -2,7 +2,7 @@ var unexpected = require('unexpected');
 var unexpectedFs = require('../');
 
 describe('unexpected-fs', function () {
-    describe('with a filesystem like', function () {
+    describe('with fs mocked out', function () {
         var fileContent = function (fileName) {
             var fs = require('fs');
 
@@ -14,7 +14,7 @@ describe('unexpected-fs', function () {
             .installPlugin(unexpectedFs);
 
         it('should not throw', function () {
-            return expect('foobar.txt', 'with a filesystem like', {
+            return expect('foobar.txt', 'with fs mocked out', {
                 '/foobar.txt': 'Foobar!'
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar');
         });
@@ -28,7 +28,7 @@ describe('unexpected-fs', function () {
             var expect = unexpected
                 .clone()
                 .installPlugin(unexpectedFs);
-            return expect('doesIt.txt', 'with a filesystem like', {
+            return expect('doesIt.txt', 'with fs mocked out', {
                 '/doesIt.txt': 'Yes it does!'
             }, 'when passed as parameter to', someMethod, 'to equal', 'Yes it does!');
         });
