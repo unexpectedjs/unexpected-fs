@@ -7,7 +7,7 @@ describe('unexpected-fs', function () {
             var fs = require('fs');
 
             return fs.readFileSync('/' + fileName, 'utf-8');
-        }
+        };
 
         var expect = unexpected
             .clone()
@@ -24,7 +24,8 @@ describe('unexpected-fs', function () {
             var fs = require('fs');
             var someMethod = function (fileName) {
                 return fs.readFileSync('/' + fileName, 'utf-8');
-            }
+            };
+
             var expect = unexpected
                 .clone()
                 .installPlugin(unexpectedFs);
