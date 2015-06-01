@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "lodash": "3.9.3",
-    "mock-fs": "2.7.0"
+    "mock-fs": "2.7.0",
+    "mountfs": "0.1.3"
   }
 }

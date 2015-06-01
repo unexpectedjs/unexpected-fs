@@ -1,4 +1,6 @@
 var mockfs = require('mock-fs');
+var fs = require('fs');
+var MountFs = require('mountfs');
 var rewriteMockFsOptions = require('./lib/rewriteMockFsOptions');
 
 module.exports = {
@@ -7,14 +9,34 @@ module.exports = {
         expect.addAssertion('with fs mocked out', function (expect, subject, value) {
             this.errorMode = 'bubble';
             var extraArgs = Array.prototype.slice.call(arguments, 3);
-            var mockOptions = rewriteMockFsOptions(value);
-            return expect.promise(function (resolve, reject) {
-                mockfs(mockOptions);
-                return resolve(expect.apply(expect, [subject].concat(extraArgs)));
+
+            var mockFileSystems = Object.keys(value).map(function (key) {
+                var mockFsConfig = rewriteMockFsOptions(value[key]);
+                return {
+                    mountPath: key,
+                    fileSystem: mockfs.fs(mockFsConfig)
+                };
+            });
+
+            var unmountAllMocks = function () {
+                mockFileSystems.forEach(function (mockFs) {
+                    fs.unmount(mockFs.mountPath);
+                });
+                fs.unpatch();
+            };
+
+            return expect.promise(function () {
+                MountFs.patchInPlace();
+
+                mockFileSystems.forEach(function (mockFileSystem) {
+                    fs.mount(mockFileSystem.mountPath, mockFileSystem.fileSystem);
+                });
+
+                return expect.apply(expect, [subject].concat(extraArgs));
             }).then(function () {
-                mockfs.restore();
+                unmountAllMocks();
             }).caught(function (err) {
-                mockfs.restore();
+                unmountAllMocks();
                 throw err;
             });
         });
