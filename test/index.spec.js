@@ -19,6 +19,14 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
         });
 
+        it('should mount a directory on /data even if the trailing / is missing', function () {
+            return expect('foobar.txt', 'with fs mocked out', {
+                '/data': {
+                    '/foobar.txt': 'Foobar!'
+                }
+            }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
+        });
+
         describe('mock.file proxy', function () {
             it('should realise that an object is a file', function () {
                 return expect(function () {

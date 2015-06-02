@@ -13,7 +13,7 @@ module.exports = {
             var mockFileSystems = Object.keys(value).map(function (key) {
                 var mockFsConfig = rewriteMockFsOptions(value[key]);
                 return {
-                    mountPath: key,
+                    mountPath: /\/$/.test(key) ? key : key + '/',
                     fileSystem: mockfs.fs(mockFsConfig)
                 };
             });
