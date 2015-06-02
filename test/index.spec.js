@@ -124,4 +124,22 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', someMethod, 'to equal', 'Yes it does!');
         });
     });
+
+    describe('regression test', function () {
+        var expect = unexpected
+            .clone()
+            .installPlugin(unexpectedFs);
+        it('should unmount even when an assertion fails', function () {
+            // If this test fails, it is because of a failure to unmount
+            // the mounted file systems when an assertion fails.
+            expect(function () {
+                require('fs').readFileSync('/data/foobar.txt');
+            }, 'with fs mocked out', { '/data': {} }, 'to throw', /ENOENT/);
+            expect(function () {
+                expect(function () {
+                    expect(true, 'to be true');
+                }, 'with fs mocked out', { '/data': {} }, 'not to throw');
+            }, 'not to throw');
+        });
+    });
 });
