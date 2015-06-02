@@ -4,9 +4,7 @@ var unexpectedFs = require('../');
 describe('unexpected-fs', function () {
     describe('with fs mocked out', function () {
         var fileContent = function (fileName) {
-            var fs = require('fs');
-
-            return fs.readFileSync('/data/' + fileName, 'utf-8');
+            return require('fs').readFileSync('/data/' + fileName, 'utf-8');
         };
 
         var expect = unexpected
