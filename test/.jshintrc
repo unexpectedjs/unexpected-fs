@@ -1,0 +1,9 @@
+{
+    "extends": "../.jshintrc",
+    // A Global defined with false as value is considered
+    "globals": {
+        // "global variable name": isWritable,
+        "describe": false,
+        "it": false
+    }
+}

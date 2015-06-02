@@ -4,6 +4,7 @@
   "description": "mock-fs assertion for unexpected",
   "main": "index.js",
   "scripts": {
+    "lint": "jshint .",
     "test": "mocha"
   },
   "repository": {
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/unexpectedjs/unexpected-fs",
   "devDependencies": {
+    "jshint": "2.8.0",
     "mocha": "2.2.5",
     "unexpected": "7.5.0"
   },

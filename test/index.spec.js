@@ -56,7 +56,7 @@ describe('unexpected-fs', function () {
         it('should allow reading files on the normal fs', function () {
             return expect(function () {
                 var packageJsonPath = path.resolve(__dirname, '..', 'package.json');
-                var packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
+                fs.readFileSync(packageJsonPath, 'utf-8');
             }, 'with fs mocked out', {}, 'not to throw');
         });
         it('should allow reading files on different mounted mock fs', function () {
