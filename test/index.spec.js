@@ -27,6 +27,15 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
         });
 
+        it('should consider relative paths on first level in mock fs to be relative to the mountPath', function () {
+            return expect('foobar.txt', 'with fs mocked out', {
+                '/data': {
+                    'foobar.txt': 'Foobar!'
+                }
+            }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
+        });
+
+
         describe('mock.file proxy', function () {
             it('should realise that an object is a file', function () {
                 return expect(function () {

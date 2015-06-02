@@ -64,4 +64,26 @@ describe('rewriteMockFsOptions', function () {
             })
         });
     });
+    it('should resolve relative paths to / on the first level', function () {
+        var options = {
+            'foobar.txt': 'foobar'
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/foobar.txt': 'foobar'
+        });
+    });
+    it('should not resolve relative paths to / on the second level', function () {
+        var options = {
+            'foobar.txt': 'foobar',
+            'data': {
+                'bar.txt': 'qux'
+            }
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/foobar.txt': 'foobar',
+            '/data': {
+                'bar.txt': 'qux'
+            }
+        });
+    });
 });
