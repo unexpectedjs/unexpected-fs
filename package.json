@@ -4,6 +4,7 @@
   "description": "mock-fs assertion for unexpected",
   "main": "index.js",
   "scripts": {
+    "coverage": "istanbul --include-all-sources cover _mocha",
     "lint": "jshint . && jscs .",
     "test": "mocha"
   },
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/unexpectedjs/unexpected-fs",
   "devDependencies": {
+    "istanbul": "0.3.14",
     "jscs": "1.13.1",
     "jshint": "2.8.0",
     "mocha": "2.2.5",
