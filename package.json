@@ -1,6 +1,6 @@
 {
   "name": "unexpected-fs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "mock-fs assertion for unexpected",
   "main": "index.js",
   "scripts": {
