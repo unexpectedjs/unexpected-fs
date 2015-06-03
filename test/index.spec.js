@@ -111,18 +111,23 @@ describe('unexpected-fs', function () {
         });
     });
 
-    describe('regression test', function () {
-        it('should unmount even when an assertion fails', function () {
-            // If this test fails, it is because of a failure to unmount
-            // the mounted file systems when an assertion fails.
-            expect(function () {
-                fs.readFileSync('/data/foobar.txt');
-            }, 'with fs mocked out', { '/data': {} }, 'to throw', /ENOENT/);
-            expect(function () {
-                expect(function () {
-                    expect(true, 'to be true');
-                }, 'with fs mocked out', { '/data': {} }, 'not to throw');
-            }, 'not to throw');
-        });
+    it('should unpatch fs even when the subsequent assertion fails', function () {
+        expect(function () {
+            return expect('/highlyUnlikely/foobar.txt', 'with fs mocked out', { '/highlyUnlikely': { 'foobar.txt': 'hey'} }, 'when passed as parameter to', function (fileName) {
+                return fs.readFileSync(fileName, 'utf-8');
+            }, 'to equal', 'goodbye');
+        }, 'to throw',
+            "expected [ '/highlyUnlikely/foobar.txt' ] when passed as parameters to\n" +
+            "function (fileName) {\n" +
+            "    return fs.readFileSync(fileName, 'utf-8');\n" +
+            "} to equal 'goodbye'\n" +
+            "  expected 'hey' to equal 'goodbye'\n" +
+            "\n" +
+            "  -hey\n" +
+            "  +goodbye"
+        );
+        expect(function () {
+            fs.readFileSync('/highlyUnlikely/foobar.txt');
+        }, 'to throw', new Error("ENOENT, no such file or directory '/highlyUnlikely/foobar.txt'"));
     });
 });
