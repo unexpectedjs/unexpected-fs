@@ -18,13 +18,6 @@ module.exports = {
                 };
             });
 
-            var unmountAllMocks = function () {
-                mockFileSystems.forEach(function (mockFs) {
-                    fs.unmount(mockFs.mountPath);
-                });
-                fs.unpatch();
-            };
-
             return expect.promise(function () {
                 MountFs.patchInPlace();
 
@@ -33,11 +26,11 @@ module.exports = {
                 });
 
                 return expect.apply(expect, [subject].concat(extraArgs));
-            }).then(function () {
-                unmountAllMocks();
-            }).caught(function (err) {
-                unmountAllMocks();
-                throw err;
+            }).finally(function () {
+                mockFileSystems.forEach(function (mockFs) {
+                    fs.unmount(mockFs.mountPath);
+                });
+                fs.unpatch();
             });
         });
     }
