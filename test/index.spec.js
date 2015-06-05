@@ -53,6 +53,21 @@ describe('unexpected-fs', function () {
                 }, 'not to throw');
             });
         });
+        describe('mock.symlink proxy', function () {
+            it('should realise that an object is a symlink', function () {
+                return expect(function () {
+                    expect(fs.readFileSync('/bar.txt', 'utf-8'), 'to satisfy', 'Foobar!');
+                }, 'with fs mocked out', {
+                    '/': {
+                        'foo.txt': 'Foobar!',
+                        'bar.txt': {
+                            _isSymlink: true,
+                            path: 'foo.txt'
+                        }
+                    }
+                }, 'not to throw');
+            });
+        });
         it('should allow reading files on the normal fs', function () {
             return expect(function () {
                 var packageJsonPath = path.resolve(__dirname, '..', 'package.json');
