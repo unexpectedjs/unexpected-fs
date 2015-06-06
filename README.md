@@ -63,6 +63,108 @@ See the test suite in
 [express-jsxtransform](https://github.com/gustavnikolaj/express-jsxtransform/blob/master/test/jsxtransform.js)
 for a real life example of how it simplify your tests.
 
+# mock-fs and mountfs
+
+This module is just a custom assertion that uses two other modules
+to mock out the filesystem for the duration of the expect call.
+
+[mock-fs](https://github.com/tschaub/mock-fs) is used to create the
+file system it self, and
+[mountfs](https://github.com/papandreou/node-mountfs) to mount those
+filesystems on top of the real filesystem.
+
+mountfs is used to avoid altering more than necessary. If you only used
+mock-fs, you would change fs entirely for the entire process, which would
+mean that you could not test code that relied on lazy loading of modules
+through require for example.
+
+# How mock-fs is used
+
+To make mock-fs work for us in this context I had to depart from their
+[API](https://github.com/tschaub/mock-fs/blob/master/readme.md) on a
+few ways:
+
+The `mock.file()` helper method would not be available as the user should
+not be required to do more than just install the unexpected-fs plugin.
+Using mock fs you would call with an options object, like so:
+
+```js
+mock.file({
+    ctime: new Date(112432332),
+    content: 'foobar'
+});
+```
+
+You can do the same with unexpected-fs, by just passing the options object
+but adding a property called `_isFile` with the value of `true`.
+
+```js
+{
+    _isFile: true,
+    ctime: new Date(112432332),
+    content: 'foobar'
+}
+```
+
+Before passing the arguments on to mock-fs, the `_isFile` property will
+be removed and the object will be passed to `mock.file`.
+
+The same is true for the `mock.directory` and `mock.symlink` methods,
+and the corresponding properties is called `_isDirectory` and
+`_isSymlink`.
+
+Another difference is a consequence of how mountfs is added to the mix.
+mock-fs would normally overwrite the entire global fs module, and you
+would not be able to read from the already existing file system.
+That is solved by only mocking out part of the file system, as given
+by the mountPath. Say that we want to mock out a file called journal.txt
+in the folder `/home/john/notes`.
+
+```js
+it('should be able to read the contents of a file', function () {
+    return expect(function () {
+        var fs = require('fs');
+        var fileContent = fs.readFileSync('/home/john/notes/journal.txt', 'utf-8');
+        return expect(fileContent, 'to equal', 'foo bar');
+    }, 'with fs mocked out', {
+        '/home/john/notes': {
+            'journal.txt': 'foo bar'
+        }
+    }, 'not to throw');
+});
+```
+
+If the original file system had data in `/home/john/notes/` those data
+will now be hidden by our mock fs. If the folders `/home`, or `/home/john`,
+or `/home/john/notes` did not exist on the original file system, they
+will appear to do now.
+
+You are not able to mock out files, without mounting a mock-fs first. So
+the following example will NOT work:
+
+```js
+expect(..., 'with fs mocked out', {
+    '/path/to/file.txt': 'blah'
+}, ...);
+```
+
+While it could be convenient to do it like the above example, it is a
+tradeoff which enables us to mount multiple small mocked file systems
+instead of having to override everything at once. Each key, on the
+root level of the configuration object will be it's own little mock fs.
+Consider this example:
+
+```js
+expect(..., 'with fs mocked out', {
+    '/home/john/notes': { ... },
+    '/home/john/documents', { ... }
+}, ...);
+```
+
+That allows us to mock out both folders mentioned in the object, while
+still being able to read stuff in the folders outside of the mounted
+mock file systems.
+
 # License
 
 This module is made public under the ISC License.
