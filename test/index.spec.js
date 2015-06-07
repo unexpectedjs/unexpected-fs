@@ -38,9 +38,21 @@ describe('unexpected-fs', function () {
         describe('mock.file proxy', function () {
             it('should realise that an object is a file', function () {
                 return expect(function () {
-                    expect(fs.readFileSync('/foo.txt', 'utf-8'), 'to satisfy', 'foobar!');
-                    expect(fs.statSync('/foo.txt'), 'to satisfy', {
-                        ctime: new Date(1)
+                    return expect.promise.all({
+                        content: expect.promise(function (run) {
+                            fs.readFile('/foo.txt', 'utf-8', run(function (err, data) {
+                                expect(err, 'to be null');
+                                expect(data, 'to be', 'foobar!')
+                            }));
+                        }),
+                        stat: expect.promise(function (run) {
+                            fs.stat('/foo.txt', run(function (err, data) {
+                                expect(err, 'to be null');
+                                expect(data, 'to satisfy', {
+                                    ctime: new Date(1)
+                                })
+                            }));
+                        })
                     });
                 }, 'with fs mocked out', {
                     '/': {
@@ -50,13 +62,17 @@ describe('unexpected-fs', function () {
                             content: 'foobar!'
                         }
                     }
-                }, 'not to throw');
+                }, 'not to error');
             });
         });
         describe('mock.symlink proxy', function () {
             it('should realise that an object is a symlink', function () {
                 return expect(function () {
-                    expect(fs.readFileSync('/bar.txt', 'utf-8'), 'to satisfy', 'Foobar!');
+                    return expect.promise(function (run) {
+                        fs.readFile('/bar.txt', 'utf-8', run(function (err, data) {
+                            expect(data, 'to satisfy', 'Foobar!');
+                        }));
+                    });
                 }, 'with fs mocked out', {
                     '/': {
                         'foo.txt': 'Foobar!',
@@ -65,7 +81,7 @@ describe('unexpected-fs', function () {
                             path: 'foo.txt'
                         }
                     }
-                }, 'not to throw');
+                }, 'not to error');
             });
         });
         it('should allow reading files on the normal fs', function () {
