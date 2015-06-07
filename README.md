@@ -157,7 +157,7 @@ Consider this example:
 ```js
 expect(..., 'with fs mocked out', {
     '/home/john/notes': { ... },
-    '/home/john/documents', { ... }
+    '/home/john/documents': { ... }
 }, ...);
 ```
 
