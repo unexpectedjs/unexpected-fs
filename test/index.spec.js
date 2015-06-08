@@ -34,27 +34,9 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
         });
 
-
         describe('mock.file proxy', function () {
             it('should realise that an object is a file', function () {
-                return expect(function () {
-                    return expect.promise.all({
-                        content: expect.promise(function (run) {
-                            fs.readFile('/foo.txt', 'utf-8', run(function (err, data) {
-                                expect(err, 'to be null');
-                                expect(data, 'to be', 'foobar!')
-                            }));
-                        }),
-                        stat: expect.promise(function (run) {
-                            fs.stat('/foo.txt', run(function (err, data) {
-                                expect(err, 'to be null');
-                                expect(data, 'to satisfy', {
-                                    ctime: new Date(1)
-                                })
-                            }));
-                        })
-                    });
-                }, 'with fs mocked out', {
+                return expect('/foo.txt', 'with fs mocked out', {
                     '/': {
                         '/foo.txt': {
                             _isFile: true,
@@ -62,7 +44,11 @@ describe('unexpected-fs', function () {
                             content: 'foobar!'
                         }
                     }
-                }, 'not to error');
+                }, 'to be a text file satisfying', {
+                    content: 'foobar!',
+                    ctime: new Date(1),
+                    isFile: true
+                });
             });
         });
         describe('mock.symlink proxy', function () {

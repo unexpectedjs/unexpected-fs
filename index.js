@@ -33,5 +33,36 @@ module.exports = {
                 fs.unpatch();
             });
         });
+
+        expect.addAssertion('to be a (path|text file) satisfying', function (expect, subject, value) {
+            var alternations = this.alternations;
+            return expect.promise(function (run) {
+                fs.lstat(subject, run(function (err, stats) {
+                    if (err) {
+                        throw err;
+                    }
+                    ['isDirectory', 'isSymbolicLink', 'isFile', 'isBlockDevice', 'isCharacterDevice', 'isFIFO', 'isSocket'].forEach(function (methodName) {
+                        stats[methodName] = stats[methodName]();
+                    });
+                    if (stats.isFile || stats.isSymlink) {
+                        fs.readFile(subject, run(function (err, content) {
+                            if (err) {
+                                throw err;
+                            }
+                            if (alternations[0] === 'text file') {
+                                content = content.toString('utf-8');
+                            }
+                            stats.content = content;
+                            return expect(stats, 'to satisfy', value);
+                        }));
+                    } else {
+                        if (alternations[0] === 'text file') {
+                            expect.fail('expected directory to be a text file');
+                        }
+                        return expect(stats, 'to satisfy', value);
+                    }
+                }));
+            });
+        });
     }
 };
