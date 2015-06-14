@@ -63,6 +63,32 @@ See the test suite in
 [express-jsxtransform](https://github.com/gustavnikolaj/express-jsxtransform/blob/master/test/jsxtransform.js)
 for a real life example of how it simplify your tests.
 
+# Assertions
+
+## `to be a (path|text file) satisfying`
+
+Assert that the stats of a given path, or the stats, and the content,
+of a given path to a text file, satisfies the given object.
+
+```js
+expect('/path/to/file', 'to be a text file satisfying', {
+    ctime: new Date('Sun Jun 14 2015 23:40:01 GMT+0200'),
+    content: 'the content as a utf-8 string'
+});
+```
+
+The instance methods from fs.Stats, `isFile`, `isDirectory`,
+`isSymbolicLink`, `isBlockDevice`, `isCharacterDevice`, `isFIFO` and
+`isSocket`, is all made available as booleans on the stats object
+which is `'to satisfied'` against.
+
+```js
+expect('/path/to/directory', 'to be a path satisfying', {
+    isDirectory: true,
+    mode: 16877
+});
+```
+
 # mock-fs and mountfs
 
 This module is just a custom assertion that uses two other modules
