@@ -65,6 +65,24 @@ for a real life example of how it simplify your tests.
 
 # Assertions
 
+## `with fs mocked out`
+
+Mocking out the filesystem for the rest of the rest of the duration of
+the given call to unexpected.
+
+```js
+function fileContentCAPS(filename) {
+    var fileContent = fs.readFileSync(filename, 'utf-8');
+    return fileContent.toUpperCase();
+}
+
+expect('/data/foobar.txt', 'with fs mocked out', {
+    '/data': {
+        'foobar.txt': 'Hello world',
+    }
+}, 'when passed as parameter to', fileContentCAPS, 'to equal', 'HELLO WORLD');
+```
+
 ## `to be a (path|text file) satisfying`
 
 Assert that the stats of a given path, or the stats, and the content,
