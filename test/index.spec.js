@@ -134,9 +134,9 @@ describe('unexpected-fs', function () {
                 return fs.readFileSync(fileName, 'utf-8');
             }, 'to equal', 'goodbye');
         }, 'to throw',
-            "expected [ '/highlyUnlikely/foobar.txt' ] when passed as parameters to\n" +
+            "expected '/highlyUnlikely/foobar.txt' when passed as parameter to\n" +
             "function (fileName) {\n" +
-            "    return fs.readFileSync(fileName, 'utf-8');\n" +
+            "  return fs.readFileSync(fileName, 'utf-8');\n" +
             "} to equal 'goodbye'\n" +
             "  expected 'hey' to equal 'goodbye'\n" +
             "\n" +
