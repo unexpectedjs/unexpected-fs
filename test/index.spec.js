@@ -147,4 +147,27 @@ describe('unexpected-fs', function () {
             fs.readFileSync('/highlyUnlikely/foobar.txt');
         }, 'to throw', new Error("ENOENT, no such file or directory '/highlyUnlikely/foobar.txt'"));
     });
+    describe('bugs', function () {
+        describe('/tmp issue #10', function () {
+            it('/tmp', function () {
+                return expect(function () {
+                    expect(fs.readFileSync('/tmp/foo', 'utf-8'), 'to equal', 'bar');
+                    expect(fs.readdirSync('/tmp'), 'to equal', [ 'foo' ]);
+                }, 'with fs mocked out', {
+                    '/tmp': {
+                        'foo': 'bar'
+                    }
+                }, 'not to error');
+            });
+            it('should foo', function () {
+                return expect(function () {
+                    console.log(fs.readdirSync('/tmp/'));
+                    console.log(fs.readdirSync('/home'), fs.readFileSync('/home/foo'));
+                }, 'with fs mocked out', {
+                    '/tmp': {},
+                    '/home': { 'foo': 'bar' }
+                }, 'not to error');
+            });
+        });
+    });
 });
