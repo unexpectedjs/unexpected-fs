@@ -6,10 +6,8 @@ var rewriteMockFsOptions = require('./lib/rewriteMockFsOptions');
 module.exports = {
     name: 'unexpected-fs',
     installInto: function (expect) {
-        expect.addAssertion('with fs mocked out', function (expect, subject, value) {
-            this.errorMode = 'bubble';
-            var extraArgs = Array.prototype.slice.call(arguments, 3);
-
+        expect.addAssertion('<any> with fs mocked out <object> <assertion>', function (expect, subject, value) {
+            expect.errorMode = 'bubble';
             var mockFileSystems = Object.keys(value).map(function (key) {
                 var mockFsConfig = rewriteMockFsOptions(value[key]);
                 return {
@@ -25,7 +23,7 @@ module.exports = {
                     fs.mount(mockFileSystem.mountPath, mockFileSystem.fileSystem);
                 });
 
-                return expect.apply(expect, [subject].concat(extraArgs));
+                return expect.shift();
             }).finally(function () {
                 mockFileSystems.forEach(function (mockFs) {
                     fs.unmount(mockFs.mountPath);
@@ -34,7 +32,7 @@ module.exports = {
             });
         });
 
-        expect.addAssertion('to be a (path|text file) satisfying', function (expect, subject, value) {
+        expect.addAssertion('<string> to be a (path|text file) satisfying <any>', function (expect, subject, value) {
             var alternations = this.alternations;
             return expect.promise(function (run) {
                 fs.lstat(subject, run(function (err, stats) {
