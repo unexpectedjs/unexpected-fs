@@ -63,7 +63,7 @@ module.exports = {
             });
         });
 
-        expect.addAssertion('<string> [not] to be (a|an existing) path', function (expect, subject) {
+        expect.addAssertion('<string> [not] to be an existing path', function (expect, subject) {
             return expect.promise(function (run) {
                 fs.exists(subject, run(function (exists) {
                     return expect(exists, '[not] to be true');
