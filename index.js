@@ -62,5 +62,15 @@ module.exports = {
                 }));
             });
         });
+
+        expect.addAssertion('<string> [not] to be (a|an existing) path', function (expect, subject) {
+            return expect.promise(function (run) {
+                fs.exists(subject, run(function (exists) {
+                    if (exists === expect.flags.not) {
+                        expect.fail('expected \'' + subject + '\' ' + expect.assertionRule.testDescriptionString);
+                    }
+                }));
+            });
+        });
     }
 };
