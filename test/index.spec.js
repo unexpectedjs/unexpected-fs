@@ -160,6 +160,7 @@ describe('unexpected-fs', function () {
         });
 
         it('should reject the promise if a path does not exist on disk', function () {
+            expect.output.preferredWidth = 80;
             return expect(expect('/i/am/certain/this/path/is/highly/unlikely/to/exist', 'to be a path'),
                 'to be rejected with', 'expected \'/i/am/certain/this/path/is/highly/unlikely/to/exist\' to be a path');
         });
@@ -185,8 +186,9 @@ describe('unexpected-fs', function () {
         });
 
         it('should reject the promise if a path does exist on disk', function () {
+            expect.output.preferredWidth = 80;
             return expect(expect(existingPath, 'not to be an existing path'),
-                'to be rejected with', 'expected \'' + existingPath + '\' not to be an existing path');
+                'to be rejected with', 'expected \'' + existingPath + '\'\nnot to be an existing path');
         });
     });
 });
