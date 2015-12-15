@@ -107,6 +107,18 @@ expect('/path/to/directory', 'to be a path satisfying', {
 });
 ```
 
+## `<string> [not] to be an existing path`
+
+Asserts that the given string is a path that exists on the file system, or not.
+
+```js
+expect('/path/that/does/not/exist', 'not to be an existing path');
+```
+
+```js
+expect('/', 'to be an existing path');
+```
+
 # mock-fs and mountfs
 
 This module is just a custom assertion that uses two other modules

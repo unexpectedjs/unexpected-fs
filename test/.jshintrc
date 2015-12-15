@@ -4,6 +4,8 @@
     "globals": {
         // "global variable name": isWritable,
         "describe": false,
-        "it": false
+        "it": false,
+        "before": false,
+        "after": false
     }
 }

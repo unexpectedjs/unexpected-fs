@@ -147,4 +147,48 @@ describe('unexpected-fs', function () {
             fs.readFileSync('/highlyUnlikely/foobar.txt');
         }, 'to throw', new Error("ENOENT, no such file or directory '/highlyUnlikely/foobar.txt'"));
     });
+
+    describe('to be an existing path', function () {
+        var existingPath = path.resolve(__dirname, '..', 'test', 'a-path-created-for-testing');
+
+        before(function () {
+            fs.mkdirSync(existingPath);
+        });
+
+        after(function () {
+            fs.rmdirSync(existingPath);
+        });
+
+        it('should reject the promise if a path does not exist on disk', function () {
+            expect.output.preferredWidth = 80;
+            return expect(expect('/i/am/certain/this/path/is/highly/unlikely/to/exist', 'to be an existing path'),
+                'to be rejected with', 'expected \'/i/am/certain/this/path/is/highly/unlikely/to/exist\'\nto be an existing path');
+        });
+
+        it('should fulfil the promise if a path does exist on disk', function () {
+            return expect(expect(existingPath, 'to be an existing path'), 'to be fulfilled');
+        });
+    });
+
+    describe('not to be an existing path', function () {
+        var existingPath = path.resolve(__dirname, '..', 'test', 'a-path-created-for-testing');
+
+        before(function () {
+            fs.mkdirSync(existingPath);
+        });
+
+        after(function () {
+            fs.rmdirSync(existingPath);
+        });
+
+        it('should fulfil the promise if a path does not exist on disk', function () {
+            return expect(expect('/i/am/certain/this/path/is/highly/unlikely/to/exist', 'not to be an existing path'), 'to be fulfilled');
+        });
+
+        it('should reject the promise if a path does exist on disk', function () {
+            expect.output.preferredWidth = 80;
+            return expect(expect(existingPath, 'not to be an existing path'),
+                'to be rejected with', 'expected \'' + existingPath + '\'\nnot to be an existing path');
+        });
+    });
 });
