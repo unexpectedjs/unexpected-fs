@@ -1,4 +1,5 @@
 var expect = require('unexpected');
+var mockFs = require('mock-fs');
 var rewriteMockFsOptions = require('../../lib/rewriteMockFsOptions');
 
 describe('rewriteMockFsOptions', function () {
@@ -6,9 +7,10 @@ describe('rewriteMockFsOptions', function () {
         var originalValue = {
             '/foobar.txt': 'foobar!'
         };
-        return expect(rewriteMockFsOptions(originalValue), 'to satisfy',
-                      expect.it('to equal', originalValue)
-                            .and('not to be', originalValue));
+        var reWrittenValue = rewriteMockFsOptions(originalValue);
+        expect(reWrittenValue, 'to equal', originalValue);
+        reWrittenValue.someNewKey = 'foo';
+        expect(originalValue, 'to equal', { '/foobar.txt': 'foobar!' }); // were it the same object, it would also contain 'someNewKey'
     });
     it('should map objects with the _isFile property set to true through mock.file', function () {
         var options = {
@@ -20,6 +22,19 @@ describe('rewriteMockFsOptions', function () {
         return expect(rewriteMockFsOptions(options), 'to satisfy', {
             '/foobar.txt': expect.it('when called with', [], 'to satisfy', {
                 _content: new Buffer('foobar!')
+            })
+        });
+    });
+    it('should not mess up buffers when creating a clone of the passed object', function () {
+        var options = {
+            'data': {
+                _isFile: true,
+                content: new Buffer('foo')
+            }
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/data': expect.it('when called with', [], 'to satisfy', {
+                _content: new Buffer('foo')
             })
         });
     });
