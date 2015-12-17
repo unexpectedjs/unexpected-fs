@@ -6,9 +6,11 @@ describe('rewriteMockFsOptions', function () {
         var originalValue = {
             '/foobar.txt': 'foobar!'
         };
-        return expect(rewriteMockFsOptions(originalValue), 'to satisfy',
-                      expect.it('to equal', originalValue)
-                            .and('not to be', originalValue));
+        var reWrittenValue = rewriteMockFsOptions(originalValue);
+        return expect(reWrittenValue, 'to equal', originalValue).then(function () {
+            reWrittenValue.someNewKey = 'foo';
+            return expect(originalValue, 'to equal', { '/foobar.txt': 'foobar!' }); // were it the same object, it would also contain 'someNewKey'
+        });
     });
     it('should map objects with the _isFile property set to true through mock.file', function () {
         var options = {
@@ -21,6 +23,45 @@ describe('rewriteMockFsOptions', function () {
             '/foobar.txt': expect.it('when called with', [], 'to satisfy', {
                 _content: new Buffer('foobar!')
             })
+        });
+    });
+    it('should not mess up buffers when creating a clone of the passed object', function () {
+        var options = {
+            'data': {
+                _isFile: true,
+                content: new Buffer('foo')
+            }
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/data': expect.it('when called with', [], 'to satisfy', {
+                _content: new Buffer('foo')
+            })
+        });
+    });
+    it('should do nothing for keys with a null value', function () {
+        var options = {
+            'data': null,
+            'other': {
+                'something': null
+            }
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/data': null,
+            '/other': {
+                'something': null
+            }
+        });
+    });
+    it('should do nothing for an input if neither of _isFile, _isSymlink or _isDirectory are defined', function () {
+        var options = {
+            'data': {
+                'something': new Buffer('foo')
+            }
+        };
+        return expect(rewriteMockFsOptions(options), 'to satisfy', {
+            '/data': {
+                'something': new Buffer('foo')
+            }
         });
     });
     it('should map objects with the _isDirectory property set to true through mock.directory', function () {
