@@ -221,6 +221,46 @@ That allows us to mock out both folders mentioned in the object, while
 still being able to read stuff in the folders outside of the mounted
 mock file systems.
 
+# Known quirks
+
+`mock-fs` will always create the folders home and tmp on the root of the
+filesystem. It is written to replace the entire fs module, and I guess that it
+behaved funny without those folders in the root.
+
+To get correct output from `fs.readdir` you should mount a folder /foo/bar like
+this:
+
+```js
+expect(..., 'with fs mocked out', {
+    '/foo': {
+        bar: { ... }
+    }
+}, ...);
+```
+
+Instead of this way:
+
+```js
+expect(..., 'with fs mocked out', {
+    '/foo/bar': { ... }
+}, ...);
+```
+
+If it is important to you that you don't get additional directories.
+
+Additionally, in the latter example, `fs.readdir` will error if you attempt the
+following:
+
+```js
+fs.readdir('/foo/bar', cb);
+```
+
+Unless you add a trailing slash:
+
+```js
+fs.readdir('/foo/bar/', cb);
+```
+
 # License
 
 This module is made public under the ISC License.

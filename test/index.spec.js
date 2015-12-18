@@ -118,10 +118,12 @@ describe('unexpected-fs', function () {
     describe('fs.readdir', function () {
         it('should list only the files specified in mocked fs', function () {
             return expect(function (cb) {
-                fs.readdir('/fixtures/', cb);
+                fs.readdir('/fixtures/migrations/', cb);
             }, 'with fs mocked out', {
                 '/fixtures': {
-                    'foo.txt': 'foobar'
+                    'migrations': {
+                        'foo.txt': 'foobar'
+                    }
                 }
             }, 'to call the callback without error').spread(function (files) {
                 return expect(files, 'to satisfy', [
@@ -131,10 +133,12 @@ describe('unexpected-fs', function () {
         });
         it('should be able to list files without a trailing slash', function () {
             return expect(function (cb) {
-                fs.readdir('/fixtures', cb);
+                fs.readdir('/fixtures/migrations', cb);
             }, 'with fs mocked out', {
                 '/fixtures': {
-                    'foo.txt': 'foobar'
+                    'migrations': {
+                        'foo.txt': 'foobar'
+                    }
                 }
             }, 'to call the callback without error');
         });
