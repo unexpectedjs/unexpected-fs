@@ -114,6 +114,23 @@ describe('unexpected-fs', function () {
             }, 'with fs mocked out', mockFs, 'not to throw');
         });
     });
+
+    describe('fs.readdir', function () {
+        it('should list only the files specified in mocked fs', function () {
+            return expect(function (cb) {
+                fs.readdir('/fixtures/', cb);
+            }, 'with fs mocked out', {
+                '/fixtures': {
+                    'foo.txt': 'foobar'
+                }
+            }, 'to call the callback without error').then(function (files) {
+                return expect(files, 'to satisfy', [
+                    'foo.txt'
+                ]);
+            });
+        });
+    });
+
     describe('does it update already exisitng fs modules?', function () {
         it('huh?', function () {
             var someMethod = function (fileName) {
