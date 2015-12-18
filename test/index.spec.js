@@ -123,11 +123,20 @@ describe('unexpected-fs', function () {
                 '/fixtures': {
                     'foo.txt': 'foobar'
                 }
-            }, 'to call the callback without error').then(function (files) {
+            }, 'to call the callback without error').spread(function (files) {
                 return expect(files, 'to satisfy', [
                     'foo.txt'
                 ]);
             });
+        });
+        it('should be able to list files without a trailing slash', function () {
+            return expect(function (cb) {
+                fs.readdir('/fixtures', cb);
+            }, 'with fs mocked out', {
+                '/fixtures': {
+                    'foo.txt': 'foobar'
+                }
+            }, 'to call the callback without error');
         });
     });
 
