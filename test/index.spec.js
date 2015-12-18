@@ -145,7 +145,7 @@ describe('unexpected-fs', function () {
         );
         expect(function () {
             fs.readFileSync('/highlyUnlikely/foobar.txt');
-        }, 'to throw', new Error("ENOENT, no such file or directory '/highlyUnlikely/foobar.txt'"));
+        }, 'to throw', /ENOENT(,|:) no such file or directory(, open)? '\/highlyUnlikely\/foobar.txt'/);
     });
 
     describe('to be an existing path', function () {
