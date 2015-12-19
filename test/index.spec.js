@@ -135,10 +135,8 @@ describe('unexpected-fs', function () {
             return expect(function (cb) {
                 fs.readdir('/fixtures/migrations', cb);
             }, 'with fs mocked out', {
-                '/fixtures': {
-                    'migrations': {
-                        'foo.txt': 'foobar'
-                    }
+                '/fixtures/migrations': {
+                    'foo.txt': 'foobar'
                 }
             }, 'to call the callback without error');
         });
