@@ -151,6 +151,19 @@ describe('unexpected-fs', function () {
                 return expect(files, 'to contain', 'foo.txt');
             });
         });
+        it('should list only the files specified in mocked fs when in root', function () {
+            return expect(function (cb) {
+                fs.readdir('/foo/', cb);
+            }, 'with fs mocked out', {
+                '/foo': {
+                    'foobar.txt': 'foobar'
+                }
+            }, 'to call the callback without error').spread(function (files) {
+                return expect(files, 'to satisfy', [
+                    'foobar.txt'
+                ]);
+            });
+        });
     });
 
     describe('does it update already exisitng fs modules?', function () {
