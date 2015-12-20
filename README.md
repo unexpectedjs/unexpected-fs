@@ -7,6 +7,12 @@ Mock filesystem for your assertions.
 [![Coverage Status](https://coveralls.io/repos/unexpectedjs/unexpected-fs/badge.svg?branch=master)](https://coveralls.io/r/unexpectedjs/unexpected-fs?branch=master)
 [![Dependency Status](https://david-dm.org/unexpectedjs/unexpected-fs.svg)](https://david-dm.org/unexpectedjs/unexpected-fs)
 
+Be aware that when you mock out the file system it will have side effects for
+the `require` function. `require` uses fs internally, and thus you will not be
+able to load modules from your local file system if you mount a mock-fs that
+shadows that location. This problem is mitigated by the fact that the mock file
+system will only exist while your assertion is running.
+
 # Usage
 
 The `unexpected-fs` plugin adds the 'with fs mocked out' assertion to
