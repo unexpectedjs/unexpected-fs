@@ -227,6 +227,27 @@ That allows us to mock out both folders mentioned in the object, while
 still being able to read stuff in the folders outside of the mounted
 mock file systems.
 
+# Known Quirks
+
+A mounted mock file system will not show up in directory listings on the normal
+file system. See the below example:
+
+```js
+// assuming a folder named `john` in /home on the local file system.
+expect(function (cb) {
+    fs.readdir('/home', cb);
+}, 'with fs mocked out', {
+    '/home/jane': {...}
+}, 'to call the callback without error').then(function (files) {
+    // this assertion will fail, as the mocked folder `jane` will not show up in
+    // the directory listing.
+    return expect(files, 'to satisfy', [
+        'john',
+        'jane'
+    ]);
+});
+```
+
 # License
 
 This module is made public under the ISC License.
