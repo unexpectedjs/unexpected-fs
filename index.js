@@ -12,7 +12,10 @@ module.exports = {
                 var mockFsConfig = rewriteMockFsOptions(value[key]);
                 return {
                     mountPath: /\/$/.test(key) ? key : key + '/',
-                    fileSystem: mockfs.fs(mockFsConfig)
+                    fileSystem: mockfs.fs(mockFsConfig, {
+                        createCwd: false,
+                        createTmp: false
+                    })
                 };
             });
 
