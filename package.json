@@ -32,7 +32,7 @@
     "jscs": "1.13.1",
     "jshint": "2.8.0",
     "mocha": "2.2.5",
-    "unexpected": "10.0.1"
+    "unexpected": "10.8.4"
   },
   "dependencies": {
     "lodash": "3.9.3",
