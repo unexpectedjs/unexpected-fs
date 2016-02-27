@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/unexpectedjs/unexpected-fs",
   "devDependencies": {
-    "coveralls": "2.11.2",
+    "coveralls": "2.11.8",
     "istanbul": "0.3.14",
     "jscs": "1.13.1",
     "jshint": "2.8.0",
