@@ -29,8 +29,8 @@
   "devDependencies": {
     "coveralls": "2.11.8",
     "istanbul": "0.4.2",
-    "jscs": "1.13.1",
-    "jshint": "2.8.0",
+    "jscs": "2.10.1",
+    "jshint": "2.9.1",
     "mocha": "2.4.5",
     "unexpected": "10.8.4"
   },
