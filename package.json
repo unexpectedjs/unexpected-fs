@@ -35,7 +35,7 @@
     "unexpected": "10.8.4"
   },
   "dependencies": {
-    "lodash": "3.9.3",
+    "lodash": "4.5.1",
     "mock-fs": "3.7.0",
     "mountfs": "0.1.5"
   }
