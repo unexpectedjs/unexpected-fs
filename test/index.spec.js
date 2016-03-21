@@ -166,6 +166,28 @@ describe('unexpected-fs', function () {
         });
     });
 
+    describe('fs.link', function () {
+        it('should support creating a hard link to an existing file', function () {
+            return expect(function () {
+                return expect.promise(function (run) {
+                    fs.link('/fixtures/migrations/foo.txt', '/fixtures/migrations/bar.txt', run(function (err) {
+                        expect(err, 'to be falsy');
+                        fs.readdir('/fixtures/migrations/', run(function (err, entries) {
+                            expect(err, 'to be falsy');
+                            expect(entries, 'to equal', [ 'bar.txt', 'foo.txt' ]);
+                        }));
+                    }));
+                });
+            }, 'with fs mocked out', {
+                '/fixtures': {
+                    'migrations': {
+                        'foo.txt': 'foobar'
+                    }
+                }
+            }, 'not to error');
+        });
+    });
+
     describe('does it update already exisitng fs modules?', function () {
         it('huh?', function () {
             var someMethod = function (fileName) {
