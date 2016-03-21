@@ -18,6 +18,14 @@ describe('unexpected-fs', function () {
             }, 'when passed as parameter to', fileContent, 'to equal', 'Foobar!');
         });
 
+        it('should list the mounted directory in the parent', function () {
+            return expect(function () {
+                expect(fs.readdirSync('/foo/bar/'), 'to contain', 'quux');
+            }, 'with fs mocked out', {
+                '/foo/bar/quux/': {}
+            }, 'not to error');
+        });
+
         it('should mount a directory on /data even if the trailing / is missing', function () {
             return expect('foobar.txt', 'with fs mocked out', {
                 '/data': {
