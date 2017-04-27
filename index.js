@@ -1,4 +1,4 @@
-var mockfs = require('mock-fs');
+var mockfs = require('mock-fs-require-fix');
 var fs = require('fs');
 var MountFs = require('mountfs');
 var rewriteMockFsOptions = require('./lib/rewriteMockFsOptions');
