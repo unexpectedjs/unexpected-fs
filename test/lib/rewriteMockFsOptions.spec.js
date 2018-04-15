@@ -93,15 +93,15 @@ describe('rewriteMockFsOptions', function () {
         };
         var rewrittenOptions = rewriteMockFsOptions(options);
         return expect(rewrittenOptions['/aSymLink'](), 'to satisfy',
-                      expect.it('not to have property', '_isSymlink')
-                            .and('to have property', '_path', 'regularFile')
-                            .and('to have properties', [
-                                '_ctime',
-                                '_atime',
-                                '_mtime',
-                                '_mode',
-                                '_uid'
-                            ]));
+            expect.it('not to have property', '_isSymlink')
+                .and('to have property', '_path', 'regularFile')
+                .and('to have properties', [
+                    '_ctime',
+                    '_atime',
+                    '_mtime',
+                    '_mode',
+                    '_uid'
+                ]));
     });
     it('should map objects with the _isFile property inside a _isDirectory property through mock.file', function () {
         var options = {
