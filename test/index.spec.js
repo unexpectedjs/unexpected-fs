@@ -22,8 +22,8 @@ describe('unexpected-fs', function () {
             return expect(function () {
                 expect(fs.readdirSync('/foo/bar/'), 'to contain', 'quux');
             }, 'with fs mocked out', {
-                '/foo/bar/quux/': {}
-            }, 'not to error');
+                    '/foo/bar/quux/': {}
+                }, 'not to error');
         });
 
         it('should mount a directory on /data even if the trailing / is missing', function () {
@@ -53,10 +53,10 @@ describe('unexpected-fs', function () {
                         }
                     }
                 }, 'to be a text file satisfying', {
-                    content: 'foobar!',
-                    ctime: new Date(1),
-                    isFile: true
-                });
+                        content: 'foobar!',
+                        ctime: new Date(1),
+                        isFile: true
+                    });
             });
         });
         describe('mock.symlink proxy', function () {
@@ -64,18 +64,19 @@ describe('unexpected-fs', function () {
                 return expect(function () {
                     return expect.promise(function (run) {
                         fs.readFile('/bar.txt', 'utf-8', run(function (err, data) {
+                            expect(err, 'to be falsy');
                             expect(data, 'to satisfy', 'Foobar!');
                         }));
                     });
                 }, 'with fs mocked out', {
-                    '/': {
-                        'foo.txt': 'Foobar!',
-                        'bar.txt': {
-                            _isSymlink: true,
-                            path: 'foo.txt'
+                        '/': {
+                            'foo.txt': 'Foobar!',
+                            'bar.txt': {
+                                _isSymlink: true,
+                                path: 'foo.txt'
+                            }
                         }
-                    }
-                }, 'not to error');
+                    }, 'not to error');
             });
         });
         it('should allow reading files on the normal fs', function () {
@@ -128,49 +129,49 @@ describe('unexpected-fs', function () {
             return expect(function (cb) {
                 fs.readdir('/fixtures/migrations/', cb);
             }, 'with fs mocked out', {
-                '/fixtures': {
-                    'migrations': {
-                        'foo.txt': 'foobar'
+                    '/fixtures': {
+                        'migrations': {
+                            'foo.txt': 'foobar'
+                        }
                     }
-                }
-            }, 'to call the callback without error').spread(function (files) {
-                return expect(files, 'to satisfy', [
-                    'foo.txt'
-                ]);
-            });
+                }, 'to call the callback without error').spread(function (files) {
+                    return expect(files, 'to satisfy', [
+                        'foo.txt'
+                    ]);
+                });
         });
         it('should be able to list files without a trailing slash', function () {
             return expect(function (cb) {
                 fs.readdir('/fixtures/migrations', cb);
             }, 'with fs mocked out', {
-                '/fixtures/migrations': {
-                    'foo.txt': 'foobar'
-                }
-            }, 'to call the callback without error');
+                    '/fixtures/migrations': {
+                        'foo.txt': 'foobar'
+                    }
+                }, 'to call the callback without error');
         });
         it('should list files in root', function () {
             return expect(function (cb) {
                 fs.readdir('/', cb);
             }, 'with fs mocked out', {
-                '/': {
-                    'foo.txt': 'foobar'
-                }
-            }, 'to call the callback without error').spread(function (files) {
-                return expect(files, 'to contain', 'foo.txt');
-            });
+                    '/': {
+                        'foo.txt': 'foobar'
+                    }
+                }, 'to call the callback without error').spread(function (files) {
+                    return expect(files, 'to contain', 'foo.txt');
+                });
         });
         it('should list only the files specified in mocked fs when in root', function () {
             return expect(function (cb) {
                 fs.readdir('/foo/', cb);
             }, 'with fs mocked out', {
-                '/foo': {
-                    'foobar.txt': 'foobar'
-                }
-            }, 'to call the callback without error').spread(function (files) {
-                return expect(files, 'to satisfy', [
-                    'foobar.txt'
-                ]);
-            });
+                    '/foo': {
+                        'foobar.txt': 'foobar'
+                    }
+                }, 'to call the callback without error').spread(function (files) {
+                    return expect(files, 'to satisfy', [
+                        'foobar.txt'
+                    ]);
+                });
         });
     });
 
@@ -182,17 +183,17 @@ describe('unexpected-fs', function () {
                         expect(err, 'to be falsy');
                         fs.readdir('/fixtures/migrations/', run(function (err, entries) {
                             expect(err, 'to be falsy');
-                            expect(entries, 'to equal', [ 'bar.txt', 'foo.txt' ]);
+                            expect(entries, 'to equal', ['bar.txt', 'foo.txt']);
                         }));
                     }));
                 });
             }, 'with fs mocked out', {
-                '/fixtures': {
-                    'migrations': {
-                        'foo.txt': 'foobar'
+                    '/fixtures': {
+                        'migrations': {
+                            'foo.txt': 'foobar'
+                        }
                     }
-                }
-            }, 'not to error');
+                }, 'not to error');
         });
     });
 
@@ -212,11 +213,11 @@ describe('unexpected-fs', function () {
 
     it('should unpatch fs even when the subsequent assertion fails', function () {
         expect(function () {
-            return expect('/highlyUnlikely/foobar.txt', 'with fs mocked out', { '/highlyUnlikely': { 'foobar.txt': 'hey'} }, 'when passed as parameter to', function (fileName) {
+            return expect('/highlyUnlikely/foobar.txt', 'with fs mocked out', { '/highlyUnlikely': { 'foobar.txt': 'hey' } }, 'when passed as parameter to', function (fileName) {
                 return fs.readFileSync(fileName, 'utf-8');
             }, 'to equal', 'goodbye');
         }, 'to throw',
-        "expected '/highlyUnlikely/foobar.txt' when passed as parameter to\n" +
+            "expected '/highlyUnlikely/foobar.txt' when passed as parameter to\n" +
             'function (fileName) {\n' +
             "  return fs.readFileSync(fileName, 'utf-8');\n" +
             "} to equal 'goodbye'\n" +
