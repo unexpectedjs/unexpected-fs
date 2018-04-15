@@ -27,16 +27,16 @@
   },
   "homepage": "https://github.com/unexpectedjs/unexpected-fs",
   "devDependencies": {
-    "coveralls": "2.11.8",
-    "eslint": "2.13.1",
-    "eslint-config-onelint": "1.2.0",
-    "istanbul": "0.4.2",
-    "mocha": "2.4.5",
-    "unexpected": "10.8.4"
+    "coveralls": "^2.11.8",
+    "eslint": "^2.13.1",
+    "eslint-config-onelint": "^1.2.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "unexpected": "^10.8.4"
   },
   "dependencies": {
-    "lodash": "4.5.1",
-    "mock-fs-require-fix": "1.0.1",
-    "mountfs": "0.5.0"
+    "lodash": "^4.5.1",
+    "mock-fs-require-fix": "^1.0.1",
+    "mountfs": "^0.5.0"
   }
 }
