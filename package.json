@@ -29,7 +29,7 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "eslint": "^5.0.0",
-    "eslint-config-onelint": "^3.0.0",
+    "eslint-config-onelint": "^4.0.0",
     "istanbul": "^0.4.2",
     "mocha": "^5.1.0",
     "unexpected": "^10.37.4"
